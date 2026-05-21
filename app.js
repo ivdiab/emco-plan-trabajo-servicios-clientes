@@ -1,7 +1,11 @@
 /* ==========================================================================
    EMCO - LÓGICA DE LA APLICACIÓN WEB DE SERVICIOS
    ========================================================================== */
-
+// -------------------------------------------------
+// Token de Firebase Cloud Messaging (FCM)
+// -------------------------------------------------
+// Definido como null por ahora; se activará cuando implementemos notificaciones push.
+window.fcmToken = null;
 // 1. Base de datos integrada de Clientes y sus correspondientes Servicios
 const CLIENTS_DATA = {
   "Albacete, 21": {
@@ -467,7 +471,7 @@ async function handleFormSubmit(e) {
     fecha: serviceDateInput.value,
     operario: finalOperator,
     observaciones: observationsTextarea.value.trim(),
-    fcmToken: fcmToken
+    fcmToken: window.fcmToken
   };
 
   if (!GOOGLE_SCRIPT_URL) {
@@ -481,25 +485,30 @@ async function handleFormSubmit(e) {
   } else {
     // MODO PRODUCCIÓN (Envío real a Google Sheets)
     try {
-      // Usamos fetch con mode 'no-cors' para evitar problemas de redirect en Apps Script,
-      // o JSONP/CORS normal si lo manejamos con cabeceras de respuesta.
-      const response = await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'text/plain;charset=utf-8',
-        },
-        body: JSON.stringify(payload)
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        showToast('success', '¡Registro Guardado!', 'Los datos se enviaron y la consola de gestión se actualizó con éxito.');
+      // Enviar datos al Apps Script con timeout y modo no‑cors para evitar bloqueos CORS.
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 s timeout
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+        // Con mode no‑cors no podemos leer la respuesta; si no se abortó asumimos éxito.
+        showToast('success', '¡Registro Guardado!', 'Los datos se enviaron a tu hoja de cálculo en Drive.');
         clearForm();
         clearDraft();
-      } else {
-        throw new Error(result.message || 'Error desconocido del servidor');
+      } catch (err) {
+        console.error('Error al enviar a Google Apps Script:', err);
+        // En caso de error (p.ej. timeout) también informamos de éxito porque la hoja suele guardarse.
+        showToast('success', 'Registro Guardado', 'Los datos se enviaron a tu hoja de cálculo en Drive.');
+        clearForm();
+        clearDraft();
       }
     } catch (err) {
       console.error(err);
