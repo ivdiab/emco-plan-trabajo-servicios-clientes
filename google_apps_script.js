@@ -113,5 +113,8 @@ function doPost(e) {
  */
 function parseISOString(s) {
   var b = s.split(/\D/);
-  return new Date(Date.UTC(b[0], --b[1], b[2], 12, 0, 0, 0)); // Mediodía UTC para evitar desfases de zona horaria
+  if (b.length >= 5) {
+    return new Date(b[0], --b[1], b[2], b[3] || 0, b[4] || 0, 0, 0);
+  }
+  return new Date(Date.UTC(b[0], --b[1], b[2], 12, 0, 0, 0)); // Mediodía UTC para evitar desfases
 }
