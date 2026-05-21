@@ -1,0 +1,295 @@
+{
+  "Albacete, 21": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Alicatado zaguán",
+      "Luminaria",
+      "Terraza",
+      "Cuartos"
+    ]
+  },
+  "Alboraya, 10": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Luminaria",
+      "Terraza"
+    ]
+  },
+  "Arquitecto Alfaro, 25": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Pasaje",
+      "Puerta",
+      "Ventanas",
+      "Luminaria",
+      "Cuartos",
+      "Alicatado zaguán"
+    ]
+  },
+  "Ausias March, 105": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Luminaria",
+      "Ventanas",
+      "Puerta",
+      "Terraza"
+    ]
+  },
+  "Baja, 42": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Terraza",
+      "Vitrificado"
+    ]
+  },
+  "Bellús, 1": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Luminaria"
+    ]
+  },
+  "Bernia, 9": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Vitrificado"
+    ]
+  },
+  "Camino Alabau, 20": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Alicatado zaguán",
+      "Luminaria",
+      "Terraza",
+      "Cuartos"
+    ]
+  },
+  "Camino Alabau, 24": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Luminaria",
+      "Terraza",
+      "Cuartos"
+    ]
+  },
+  "Camino Alabau, 8": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Alicatado zaguán",
+      "Luminaria",
+      "Terraza",
+      "Cuartos"
+    ]
+  },
+  "Daroca, 26": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Tejado",
+      "Terraza"
+    ]
+  },
+  "Duque de Calabria, 3": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Luminaria",
+      "Ventanas",
+      "Puerta",
+      "Terraza",
+      "Cuartos",
+      "Vitrificado"
+    ]
+  },
+  "Escrivá, 2": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Cuartos"
+    ]
+  },
+  "Fuencaliente, 8": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Luminaria",
+      "Ventanas",
+      "Puerta",
+      "Terraza",
+      "Cuartos"
+    ]
+  },
+  "Guillem de Anglesola, 3": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Alicatado zaguán",
+      "Terraza",
+      "Vitrificado",
+      "Luminaria",
+      "Cuartos"
+    ]
+  },
+  "Linares, 21Bis": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Alicatado zaguán",
+      "Vitrificado",
+      "Terraza",
+      "Luminaria",
+      "Cuartos"
+    ]
+  },
+  "Músico Cabanilles, 42": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Terraza",
+      "Ventanas",
+      "Puerta",
+      "Alicatado zaguán",
+      "Luminaria",
+      "Cuartos"
+    ]
+  },
+  "PDBF, 1": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Alicatado zaguán",
+      "Terraza",
+      "Vitrificado",
+      "Luminaria",
+      "Cuartos"
+    ]
+  },
+  "PDBF, 2": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Alicatado zaguán",
+      "Terraza",
+      "Vitrificado",
+      "Luminaria",
+      "Cuartos"
+    ]
+  },
+  "Pintor Genaro Lahuerta, 45": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Luminaria"
+    ]
+  },
+  "Plaza Dramaturgo Fausto Hernández Casajuana, 2": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta"
+    ]
+  },
+  "San Cristóbal, 8": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Alicatado zaguán",
+      "Luminaria"
+    ]
+  },
+  "Virgen del Puig, 20": {
+    "tipo": "Comunidad",
+    "servicios": [
+      "Ventanas",
+      "Puerta",
+      "Luminaria"
+    ]
+  },
+  "Studio Pilates Adela Ferrer": {
+    "tipo": "Estudio de Pilates",
+    "servicios": [
+      "Ventanas",
+      "Espejos"
+    ]
+  },
+  "AEPV": {
+    "tipo": "Oficina",
+    "servicios": [
+      "Ventanas"
+    ]
+  },
+  "Centro Estética Avanzada Amparo Sánchez": {
+    "tipo": "Centro de Estetica",
+    "servicios": [
+      "Ventanas",
+      "Persiana",
+      "Toldo y Rotulo"
+    ]
+  },
+  "DaaS Group": {
+    "tipo": "Oficina",
+    "servicios": [
+      "Ventanas"
+    ]
+  },
+  "EOLAB": {
+    "tipo": "Oficina",
+    "servicios": [
+      "Ventanas"
+    ]
+  },
+  "FEV": {
+    "tipo": "Oficina",
+    "servicios": [
+      "Ventanas"
+    ]
+  },
+  "Madersan": {
+    "tipo": "Oficina",
+    "servicios": [
+      "Ventanas"
+    ]
+  },
+  "Mama Pottery": {
+    "tipo": "Cafetería",
+    "servicios": [
+      "Ventanas"
+    ]
+  },
+  "Scito Fundació": {
+    "tipo": "Oficina",
+    "servicios": [
+      "Ventanas"
+    ]
+  },
+  "Victor Barbeta - Arquitecto": {
+    "tipo": "Oficina",
+    "servicios": [
+      "Ventanas"
+    ]
+  },
+  "VW Group Services": {
+    "tipo": "Oficina",
+    "servicios": [
+      "Ventanas"
+    ]
+  }
+}

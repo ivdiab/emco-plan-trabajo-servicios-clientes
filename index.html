@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EMCO - Control de Servicios de Limpieza</title>
+  <!-- Google Fonts: Outfit e Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Enlace a estilos -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="background-decor">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+  </div>
+
+  <main class="app-container">
+    <header class="app-header">
+      <div class="logo-container">
+        <span class="logo-icon">✨</span>
+        <h1 class="logo-text">EMCO</h1>
+      </div>
+      <p class="subtitle">Consola de Control y Registro de Servicios</p>
+    </header>
+
+    <div class="glass-card">
+      <form id="service-form" novalidate>
+        
+        <!-- SECCIÓN 1: CLIENTE -->
+        <div class="form-group">
+          <label for="client-search" class="field-label">
+            <span class="label-number">01</span> Cliente
+          </label>
+          <div class="custom-select-container" id="client-select-wrapper">
+            <div class="search-input-wrapper">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="client-search" placeholder="Busca y selecciona un cliente..." autocomplete="off">
+              <button type="button" class="clear-search-btn" id="clear-search" style="display: none;">&times;</button>
+            </div>
+            <div class="dropdown-list" id="client-dropdown">
+              <!-- Los clientes se cargarán dinámicamente aquí -->
+            </div>
+          </div>
+          <input type="hidden" id="selected-client" name="cliente" required>
+          <span class="validation-message" id="client-error">Por favor, selecciona un cliente de la lista.</span>
+        </div>
+
+        <!-- SECCIÓN 2: SERVICIOS CORRESPONDIENTES -->
+        <div class="form-group" id="services-section" style="display: none;">
+          <label class="field-label">
+            <span class="label-number">02</span> Servicios Realizados
+          </label>
+          <p class="field-help">Selecciona todos los servicios que has limpiado en esta visita:</p>
+          
+          <div class="services-grid" id="services-container">
+            <!-- Los servicios del cliente seleccionado se cargarán dinámicamente aquí -->
+          </div>
+
+          <div class="add-custom-service-container">
+            <button type="button" class="btn-secondary btn-sm" id="btn-add-custom-service">
+              <span class="btn-icon">+</span> Añadir servicio personalizado
+            </button>
+            
+            <div class="custom-service-input-group" id="custom-service-input-wrapper" style="display: none;">
+              <input type="text" id="custom-service-name" placeholder="Nombre del servicio extra...">
+              <button type="button" class="btn-primary btn-sm" id="btn-save-custom-service">Añadir</button>
+              <button type="button" class="btn-secondary btn-sm" id="btn-cancel-custom-service">Cancelar</button>
+            </div>
+          </div>
+          <span class="validation-message" id="services-error">Debes seleccionar al menos un servicio.</span>
+        </div>
+
+        <!-- SECCIÓN 3: DETALLES DEL REGISTRO (GRID) -->
+        <div class="form-grid">
+          <!-- FECHA -->
+          <div class="form-group">
+            <label for="service-date" class="field-label">
+              <span class="label-number">03</span> Fecha del Servicio
+            </label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">📅</span>
+              <input type="date" id="service-date" name="fecha" required>
+            </div>
+            <span class="validation-message" id="date-error">Por favor, selecciona una fecha válida.</span>
+          </div>
+
+          <!-- OPERARIO -->
+          <div class="form-group" id="operator-group">
+            <label for="operator-name" class="field-label">
+              <span class="label-number">04</span> Operario
+            </label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">👤</span>
+              <select id="operator-name" name="operario">
+                <option value="" disabled selected>Elige un operario...</option>
+                <option value="Ivan">Ivan</option>
+                <option value="Otro">Otro (Escribir a mano)...</option>
+              </select>
+            </div>
+            <div class="custom-operator-input-wrapper" id="custom-operator-wrapper" style="display: none; margin-top: 10px;">
+              <input type="text" id="custom-operator-name" placeholder="Escribe el nombre del operario..." autocomplete="off">
+            </div>
+            <span class="validation-message" id="operator-error">Por favor, selecciona un operario o escribe su nombre.</span>
+          </div>
+        </div>
+
+        <!-- SECCIÓN 4: OBSERVACIONES -->
+        <div class="form-group">
+          <label for="observations" class="field-label">
+            <span class="label-number">05</span> Observaciones / Notas
+          </label>
+          <div class="input-icon-wrapper textarea-wrapper">
+            <span class="input-icon textarea-icon">✍️</span>
+            <textarea id="observations" name="observaciones" rows="3" placeholder="Añade aquí cualquier detalle, incidencia o comentario relevante..."></textarea>
+          </div>
+        </div>
+
+        <!-- CONFIGURACIÓN DE CONEXIÓN (Muestra si no está configurada la URL) -->
+        <div class="config-banner" id="config-banner" style="display: none;">
+          <div class="config-banner-content">
+            <span class="banner-icon">⚙️</span>
+            <div>
+              <strong>Integración no configurada:</strong> La aplicación está funcionando en modo de simulación. Introduce la URL de tu Web App de Google Sheets en el archivo <code>app.js</code> para conectar con tu Drive.
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTÓN DE ENVÍO -->
+        <div class="form-actions">
+          <button type="submit" class="btn-primary btn-lg btn-submit" id="submit-btn">
+            <span class="btn-text">Registrar Plan de Trabajo</span>
+            <span class="btn-loader" style="display: none;">
+              <span class="spinner"></span> Enviando a Drive...
+            </span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <!-- NOTIFICACIONES TOAST -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- SCRIPT -->
+  <script src="app.js"></script>
+</body>
+</html>

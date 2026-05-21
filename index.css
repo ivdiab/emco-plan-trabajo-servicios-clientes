@@ -1,0 +1,802 @@
+/* ==========================================================================
+   SISTEMA DE DISEÑO EMCO PREMIUM - GLASSMORPHISM
+   ========================================================================== */
+
+:root {
+  /* Paleta de Colores HSL (Tonos EMCO Azul y Plata Refinados) */
+  --primary-hue: 215;
+  --primary: HSL(var(--primary-hue), 85%, 55%);
+  --primary-light: HSL(var(--primary-hue), 85%, 65%);
+  --primary-dark: HSL(var(--primary-hue), 90%, 40%);
+  --primary-glow: HSL(var(--primary-hue), 85%, 55%, 0.15);
+  
+  --secondary: HSL(220, 15%, 50%);
+  
+  --success: HSL(145, 65%, 45%);
+  --success-glow: HSL(145, 65%, 45%, 0.2);
+  --error: HSL(355, 75%, 55%);
+  
+  /* Temas (Por defecto Claro) */
+  --bg-gradient-start: HSL(210, 30%, 96%);
+  --bg-gradient-end: HSL(215, 20%, 90%);
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(255, 255, 255, 0.5);
+  --text-main: HSL(220, 40%, 15%);
+  --text-muted: HSL(220, 20%, 45%);
+  --input-bg: rgba(255, 255, 255, 0.9);
+  --input-border: rgba(0, 0, 0, 0.1);
+  --dropdown-bg: rgba(255, 255, 255, 0.95);
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  
+  --border-radius-lg: 20px;
+  --border-radius-md: 12px;
+  --border-radius-sm: 8px;
+  
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Soporte para Modo Oscuro del Sistema */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-gradient-start: HSL(220, 30%, 10%);
+    --bg-gradient-end: HSL(225, 25%, 6%);
+    --card-bg: rgba(20, 24, 35, 0.65);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text-main: HSL(210, 25%, 95%);
+    --text-muted: HSL(215, 15%, 70%);
+    --input-bg: rgba(10, 14, 23, 0.6);
+    --input-border: rgba(255, 255, 255, 0.1);
+    --dropdown-bg: rgba(15, 20, 30, 0.98);
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    
+    --primary-light: HSL(var(--primary-hue), 85%, 60%);
+    --primary-dark: HSL(var(--primary-hue), 70%, 50%);
+  }
+}
+
+/* ==========================================================================
+   ESTILOS GENERALES Y BASE
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text-main);
+  background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Decoraciones de Fondo */
+.background-decor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.45;
+}
+
+.circle-1 {
+  width: 35vw;
+  height: 35vw;
+  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  top: -10%;
+  right: -5%;
+}
+
+.circle-2 {
+  width: 45vw;
+  height: 45vw;
+  background: radial-gradient(circle, HSL(195, 80%, 50%) 0%, transparent 70%);
+  bottom: -15%;
+  left: -10%;
+}
+
+/* Contenedor Principal */
+.app-container {
+  width: 100%;
+  max-width: 680px;
+  z-index: 10;
+  animation: fadeIn 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Encabezado */
+.app-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.logo-icon {
+  font-size: 2.2rem;
+  animation: float 4s ease-in-out infinite;
+}
+
+.logo-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(to right, var(--primary-light), var(--primary-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   TARJETA GLASSMORPHISM
+   ========================================================================== */
+
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--border-radius-lg);
+  padding: 40px;
+  box-shadow: 0 20px 40px var(--shadow-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary), HSL(195, 80%, 50%), var(--primary-light));
+}
+
+/* ==========================================================================
+   CAMPOS DEL FORMULARIO Y GRUPOS
+   ========================================================================== */
+
+.form-group {
+  margin-bottom: 28px;
+  position: relative;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-main);
+}
+
+.label-number {
+  background: var(--primary-glow);
+  color: var(--primary);
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid HSL(var(--primary-hue), 85%, 55%, 0.15);
+}
+
+.field-help {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  margin-top: -4px;
+}
+
+/* Inputs de Texto, Selects y Textareas */
+input[type="text"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--border-radius-md);
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-glow);
+}
+
+/* Input Wrappers con Iconos */
+.input-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon-wrapper .input-icon {
+  position: absolute;
+  left: 16px;
+  font-size: 1.1rem;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.input-icon-wrapper input,
+.input-icon-wrapper select,
+.input-icon-wrapper textarea {
+  padding-left: 48px;
+}
+
+.textarea-wrapper {
+  align-items: flex-start;
+}
+
+.textarea-icon {
+  margin-top: 14px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* Grid de Formulario para Fecha y Operario */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 500px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+/* ==========================================================================
+   DROPDOWN DE CLIENTES PERSONALIZADO (BUSCADOR)
+   ========================================================================== */
+
+.custom-select-container {
+  position: relative;
+  width: 100%;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input-wrapper .search-icon {
+  position: absolute;
+  left: 16px;
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+.search-input-wrapper input {
+  padding-left: 48px;
+  padding-right: 40px;
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+.clear-search-btn:hover {
+  color: var(--error);
+  transform: scale(1.1);
+}
+
+.dropdown-list {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  max-height: 280px; /* Altura compacta y segura para móviles */
+  background: var(--dropdown-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 12px 30px var(--shadow-color);
+  overflow-y: auto;
+  z-index: 100;
+  display: none;
+  animation: slideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Altura extendida optimizada para pantallas grandes (PC) */
+@media (min-width: 768px) {
+  .dropdown-list {
+    max-height: 500px;
+  }
+}
+
+/* Personalización premium de la barra de desplazamiento (Scrollbar) */
+.dropdown-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dropdown-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dropdown-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .dropdown-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+
+.dropdown-list::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+.dropdown-item {
+  padding: 14px 20px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: var(--transition-smooth);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+@media (prefers-color-scheme: dark) {
+  .dropdown-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  }
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background: var(--primary-glow);
+  color: var(--primary);
+  padding-left: 26px;
+}
+
+.dropdown-item .client-type {
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-muted);
+  padding: 2px 8px;
+  border-radius: 12px;
+  transition: var(--transition-smooth);
+}
+
+@media (prefers-color-scheme: dark) {
+  .dropdown-item .client-type {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.dropdown-item:hover .client-type {
+  background: var(--primary);
+  color: white;
+}
+
+.dropdown-no-results {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   SELECCIÓN DE SERVICIOS INTERACTIVOS (CHIPS/TARJETAS)
+   ========================================================================== */
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.service-card {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--border-radius-md);
+  padding: 14px 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  transition: var(--transition-bounce);
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary-light);
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.service-card-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: var(--transition-smooth);
+}
+
+.service-card-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--input-border);
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: var(--transition-smooth);
+  flex-shrink: 0;
+}
+
+.service-card-checkbox::after {
+  content: '✓';
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: var(--transition-bounce);
+}
+
+/* Estado Seleccionado */
+.service-card.selected {
+  background: var(--primary-glow);
+  border-color: var(--primary);
+}
+
+.service-card.selected .service-card-name {
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  .service-card.selected .service-card-name {
+    color: white;
+  }
+}
+
+.service-card.selected .service-card-checkbox {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.service-card.selected .service-card-checkbox::after {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* ==========================================================================
+   SERVICIOS PERSONALIZADOS ADICIONALES
+   ========================================================================== */
+
+.add-custom-service-container {
+  margin-top: 14px;
+}
+
+.custom-service-input-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  animation: fadeIn 0.3s ease;
+}
+
+.custom-service-input-group input {
+  flex: 1;
+  padding: 10px 14px;
+}
+
+/* ==========================================================================
+   BOTONES
+   ========================================================================== */
+
+.btn-primary, .btn-secondary {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition-bounce);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  box-shadow: 0 4px 15px var(--primary-glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--primary-glow);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-main);
+  border: 1px solid var(--input-border);
+}
+
+@media (prefers-color-scheme: dark) {
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+@media (prefers-color-scheme: dark) {
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* Tamaños de Botones */
+.btn-sm {
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  border-radius: var(--border-radius-sm);
+}
+
+.btn-lg {
+  padding: 16px 32px;
+  font-size: 1.05rem;
+  border-radius: var(--border-radius-md);
+  width: 100%;
+}
+
+.btn-submit {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Spinner Loader */
+.btn-loader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Banner de Configuración */
+.config-banner {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px dashed rgba(245, 158, 11, 0.4);
+  border-radius: var(--border-radius-md);
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  animation: fadeIn 0.4s ease;
+}
+
+.config-banner-content {
+  display: flex;
+  gap: 12px;
+  font-size: 0.82rem;
+  color: HSL(35, 80%, 40%);
+  line-height: 1.4;
+}
+
+@media (prefers-color-scheme: dark) {
+  .config-banner-content {
+    color: HSL(40, 90%, 65%);
+  }
+}
+
+.banner-icon {
+  font-size: 1.1rem;
+}
+
+/* ==========================================================================
+   MENSAJES DE VALIDACIÓN DE CAMPOS
+   ========================================================================== */
+
+.validation-message {
+  display: none;
+  font-size: 0.8rem;
+  color: var(--error);
+  margin-top: 6px;
+  animation: fadeIn 0.25s ease;
+}
+
+.form-group.invalid input,
+.form-group.invalid select,
+.form-group.invalid textarea {
+  border-color: var(--error);
+  background: rgba(239, 68, 68, 0.03);
+}
+
+.form-group.invalid .validation-message {
+  display: block;
+}
+
+/* ==========================================================================
+   NOTIFICACIONES TOAST PREMIUM
+   ========================================================================== */
+
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 380px;
+  width: calc(100% - 48px);
+}
+
+.toast {
+  background: var(--dropdown-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--border-radius-md);
+  padding: 16px 20px;
+  box-shadow: 0 10px 30px var(--shadow-color);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transform: translateY(30px);
+  opacity: 0;
+  animation: toastIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  transition: var(--transition-smooth);
+}
+
+.toast-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.toast-body {
+  flex: 1;
+}
+
+.toast-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+}
+
+.toast-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.toast.success {
+  border-left: 4px solid var(--success);
+}
+.toast.success .toast-icon {
+  color: var(--success);
+}
+
+.toast.error {
+  border-left: 4px solid var(--error);
+}
+.toast.error .toast-icon {
+  color: var(--error);
+}
+
+.toast.hide {
+  animation: toastOut 0.3s ease forwards;
+}
+
+/* ==========================================================================
+   ANIMACIONES KEYFRAMES
+   ========================================================================== */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(5deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes toastIn {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toastOut {
+  to {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}

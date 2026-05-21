@@ -1,0 +1,16 @@
+{
+  "name": "emco-plan_de_trabajo-servicios_clientes",
+  "version": "1.0.0",
+  "description": "Carpeta del proyecto local para el Formulario de Control de Servicios de EMCO Limpiezas.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}
