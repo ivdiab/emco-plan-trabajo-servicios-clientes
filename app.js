@@ -178,11 +178,13 @@ let adHocServices = []; // Servicios personalizados añadidos temporalmente
 // INICIALIZACIÓN
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Establecer fecha de hoy por defecto
-  const today = new Date().toISOString().split('T')[0];
-  serviceDateInput.value = today;
-
-  // 2. Comprobar si hay URL configurada
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hour = String(now.getHours()).padStart(2, '0');
+  const minute = String(now.getMinutes()).padStart(2, '0');
+  serviceDateInput.value = `${year}-${month}-${day}T${hour}:${minute}`;
   if (!GOOGLE_SCRIPT_URL) {
     configBanner.style.display = 'block';
   }
@@ -485,21 +487,17 @@ async function handleFormSubmit(e) {
   } else {
     // MODO PRODUCCIÓN (Envío real a Google Sheets)
     try {
-      // Enviar datos al Apps Script con timeout y modo no‑cors para evitar bloqueos CORS.
+      // Enviar datos al Apps Script con timeout.
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 s timeout
+        const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 s timeout
         const response = await fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
           body: JSON.stringify(payload),
           signal: controller.signal,
         });
         clearTimeout(timeoutId);
-        // Con mode no‑cors no podemos leer la respuesta; si no se abortó asumimos éxito.
         showToast('success', '¡Registro Guardado!', 'Los datos se enviaron a tu hoja de cálculo en Drive.');
         clearForm();
         clearDraft();
@@ -542,11 +540,14 @@ function clearForm() {
   form.reset();
   // Restablecer valores especiales
   resetClientSelection();
-  customOperatorWrapper.style.display = 'none';
-  customOperatorInput.value = '';
-  // Reestablecer fecha de hoy
-  const today = new Date().toISOString().split('T')[0];
-  serviceDateInput.value = today;
+  // Restablecer fecha al día y hora actuales (datetime-local)
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hour = String(now.getHours()).padStart(2, '0');
+  const minute = String(now.getMinutes()).padStart(2, '0');
+  serviceDateInput.value = `${year}-${month}-${day}T${hour}:${minute}`;
 }
 
 // ==========================================================================

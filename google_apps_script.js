@@ -34,8 +34,8 @@ function doPost(e) {
     var fechaServicio = parseISOString(fechaStr);
     var timestamp = new Date().toISOString();
     
-    // 2. Abrir el documento activo de Google Sheets
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    // 2. Abrir el documento activo de Google Sheets por ID
+    var ss = SpreadsheetApp.openById('1lamFClIakt-AMNt6s331z8hm8zyunJYMPfU5kmKJXr8');
     
     // ==========================================
     // PARTE A: GUARDAR EN HISTORIAL LIMPIO
