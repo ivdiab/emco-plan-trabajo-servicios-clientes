@@ -73,7 +73,7 @@
           <span class="validation-message" id="services-error">Debes seleccionar al menos un servicio.</span>
         </div>
 
-        <!-- SECCIÓN 3: DETALLES DEL REGISTRO (GRID) -->
+        <!-- SECCIÓN 3 Y 4: DETALLES DEL REGISTRO (GRID) -->
         <div class="form-grid">
           <!-- FECHA -->
           <div class="form-group">
@@ -81,9 +81,8 @@
               <span class="label-number">03</span> Fecha del Servicio
             </label>
             <div class="input-icon-wrapper">
-               <span class="input-icon">📅</span>
+              <span class="input-icon">📅</span>
               <input type="datetime-local" id="service-date" name="fecha" required>
-              
             </div>
             <span class="validation-message" id="date-error">Por favor, selecciona una fecha válida.</span>
           </div>
@@ -108,10 +107,24 @@
           </div>
         </div>
 
-        <!-- SECCIÓN 4: OBSERVACIONES -->
+        <!-- SECCIÓN 5: FOTOS / EVIDENCIAS -->
+        <div class="form-group">
+          <label for="photo-input" class="field-label">
+            <span class="label-number">05</span> Fotos / Evidencia (Opcional)
+          </label>
+          <div class="input-icon-wrapper" style="padding: 12px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed #cbd5e1; text-align: center;">
+            <input type="file" id="photo-input" accept="image/*" capture="environment" multiple style="display: none;">
+            <button type="button" class="btn-secondary btn-sm" id="btn-select-photos" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <span>📷</span> Tomar foto o adjuntar imágenes
+            </button>
+            <div id="photo-preview-container" style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; justify-content: center;"></div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN 6: OBSERVACIONES -->
         <div class="form-group">
           <label for="observations" class="field-label">
-            <span class="label-number">05</span> Observaciones / Notas
+            <span class="label-number">06</span> Observaciones / Notas
           </label>
           <div class="input-icon-wrapper textarea-wrapper">
             <span class="input-icon textarea-icon">✍️</span>
@@ -119,7 +132,7 @@
           </div>
         </div>
 
-        <!-- CONFIGURACIÓN DE CONEXIÓN (Muestra si no está configurada la URL) -->
+        <!-- CONFIGURACIÓN DE CONEXIÓN -->
         <div class="config-banner" id="config-banner" style="display: none;">
           <div class="config-banner-content">
             <span class="banner-icon">⚙️</span>
