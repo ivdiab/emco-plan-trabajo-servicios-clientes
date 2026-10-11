@@ -1,155 +1,12 @@
 /* ==========================================================================
-   EMCO - LÓGICA DE LA APLICACIÓN WEB DE SERVICIOS
+   EMCO - LÓGICA DE LA APLICACIÓN WEB DE SERVICIOS CON FOTOS
    ========================================================================== */
 
-// -------------------------------------------------
-// Token de Firebase Cloud Messaging (FCM)
-// -------------------------------------------------
 window.fcmToken = null;
 
-// Base de datos de Clientes y Servicios (Servirá como respaldo si no hay conexión)
-let CLIENTS_DATA = {
-  "Albacete, 21": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Alicatado zaguán", "Luminaria", "Terraza", "Cuartos"]
-  },
-  "Alboraya, 10": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Luminaria", "Terraza"]
-  },
-  "Arquitecto Alfaro, 25": {
-    "tipo": "Comunidad",
-    "servicios": ["Pasaje", "Puerta", "Ventanas", "Luminaria", "Cuartos", "Alicatado zaguán"]
-  },
-  "Ausias March, 105": {
-    "tipo": "Comunidad",
-    "servicios": ["Luminaria", "Ventanas", "Puerta", "Terraza"]
-  },
-  "Baja, 42": {
-    "tipo": "Comunidad",
-    "servicios": ["Terraza", "Vitrificado"]
-  },
-  "Bellús, 1": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Luminaria"]
-  },
-  "Bernia, 9": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Vitrificado"]
-  },
-  "Camino Alabau, 20": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Alicatado zaguán", "Luminaria", "Terraza", "Cuartos"]
-  },
-  "Camino Alabau, 24": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Luminaria", "Terraza", "Cuartos"]
-  },
-  "Camino Alabau, 8": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Alicatado zaguán", "Luminaria", "Terraza", "Cuartos"]
-  },
-  "Daroca, 26": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Tejado", "Terraza"]
-  },
-  "Duque de Calabria, 3": {
-    "tipo": "Comunidad",
-    "servicios": ["Luminaria", "Ventanas", "Puerta", "Terraza", "Cuartos", "Vitrificado"]
-  },
-  "Escrivá, 2": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Cuartos"]
-  },
-  "Fuencaliente, 8": {
-    "tipo": "Comunidad",
-    "servicios": ["Luminaria", "Ventanas", "Puerta", "Terraza", "Cuartos"]
-  },
-  "Guillem de Anglesola, 3": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Alicatado zaguán", "Terraza", "Vitrificado", "Luminaria", "Cuartos"]
-  },
-  "Linares, 21Bis": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Alicatado zaguán", "Vitrificado", "Terraza", "Luminaria", "Cuartos"]
-  },
-  "Músico Cabanilles, 42": {
-    "tipo": "Comunidad",
-    "servicios": ["Terraza", "Ventanas", "Puerta", "Alicatado zaguán", "Luminaria", "Cuartos"]
-  },
-  "PDBF, 1": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Alicatado zaguán", "Terraza", "Vitrificado", "Luminaria", "Cuartos"]
-  },
-  "PDBF, 2": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Alicatado zaguán", "Terraza", "Vitrificado", "Luminaria", "Cuartos"]
-  },
-  "Pintor Genaro Lahuerta, 45": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Luminaria"]
-  },
-  "Plaza Dramaturgo Fausto Hernández Casajuana, 2": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta"]
-  },
-  "San Cristóbal, 8": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Alicatado zaguán", "Luminaria"]
-  },
-  "Virgen del Puig, 20": {
-    "tipo": "Comunidad",
-    "servicios": ["Ventanas", "Puerta", "Luminaria"]
-  },
-  "Studio Pilates Adela Ferrer": {
-    "tipo": "Estudio de Pilates",
-    "servicios": ["Ventanas", "Espejos"]
-  },
-  "AEPV": {
-    "tipo": "Oficina",
-    "servicios": ["Ventanas"]
-  },
-  "Centro Estética Avanzada Amparo Sánchez": {
-    "tipo": "Centro de Estética",
-    "servicios": ["Ventanas", "Persiana", "Toldo y Rótulo"]
-  },
-  "DaaS Group": {
-    "tipo": "Oficina",
-    "servicios": ["Ventanas"]
-  },
-  "EOLAB": {
-    "tipo": "Oficina",
-    "servicios": ["Ventanas"]
-  },
-  "FEV": {
-    "tipo": "Oficina",
-    "servicios": ["Ventanas"]
-  },
-  "Madersan": {
-    "tipo": "Oficina",
-    "servicios": ["Ventanas"]
-  },
-  "Mama Pottery": {
-    "tipo": "Cafetería",
-    "servicios": ["Ventanas"]
-  },
-  "Scito Fundació": {
-    "tipo": "Oficina",
-    "servicios": ["Ventanas"]
-  },
-  "Victor Barbeta - Arquitecto": {
-    "tipo": "Oficina",
-    "servicios": ["Ventanas"]
-  },
-  "VW Group Services": {
-    "tipo": "Oficina",
-    "servicios": ["Ventanas"]
-  }
-};
+let CLIENTS_DATA = {};
+let fotosSeleccionadas = []; // Almacena objetos { name, mimeType, base64 }
 
-// ==========================================================================
-// CONFIGURACIÓN DE CONEXIÓN CON GOOGLE SHEETS
-// ==========================================================================
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwTsqltmkZf0cvSwWqkmJe7H5AxTqCcZJBGWFZPkKUr52k2qXT4s3KMIUKTEU-sRQxg/exec"; 
 
 // Elementos del DOM
@@ -173,27 +30,17 @@ const toastContainer = document.getElementById('toast-container');
 let activeSelectedServices = [];
 let adHocServices = [];
 
-// ==========================================================================
-// INICIALIZACIÓN
-// ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Establecer fecha actual
   establecerFechaActual();
 
   if (!GOOGLE_SCRIPT_URL && configBanner) {
     configBanner.style.display = 'block';
   }
 
-  // 2. Activar eventos de interacción inmediatamente
   initEventListeners();
-
-  // 3. Renderizar lista inicial
+  configurarGestionFotos();
   renderClientDropdown('');
-
-  // 4. Cargar borrador si existe
   loadDraft();
-
-  // 5. Cargar clientes dinámicos desde Google Sheets en segundo plano
   fetchDynamicClients();
 });
 
@@ -209,7 +56,99 @@ function establecerFechaActual() {
 }
 
 // ==========================================================================
-// CARGA DINÁMICA DE CLIENTES DESDE GOOGLE SHEETS
+// GESTIÓN Y COMPRESIÓN DE FOTOS
+// ==========================================================================
+function configurarGestionFotos() {
+  const btnSelect = document.getElementById('btn-select-photos');
+  const photoInput = document.getElementById('photo-input');
+
+  if (btnSelect && photoInput) {
+    btnSelect.addEventListener('click', () => photoInput.click());
+
+    photoInput.addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files);
+      for (const file of files) {
+        if (file.type.startsWith('image/')) {
+          try {
+            const compressed = await comprimirImagen(file, 1024, 0.7);
+            fotosSeleccionadas.push(compressed);
+          } catch (err) {
+            console.error('Error al procesar la foto:', err);
+          }
+        }
+      }
+      renderPreviewFotos();
+      photoInput.value = '';
+    });
+  }
+}
+
+function comprimirImagen(file, maxAncho, calidad) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxAncho) {
+          height = Math.round((height * maxAncho) / width);
+          width = maxAncho;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const dataUrl = canvas.toDataURL('image/jpeg', calidad);
+        const base64 = dataUrl.split(',')[1];
+
+        resolve({
+          name: file.name,
+          mimeType: 'image/jpeg',
+          base64: base64,
+          dataUrl: dataUrl
+        });
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderPreviewFotos() {
+  const container = document.getElementById('photo-preview-container');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  fotosSeleccionadas.forEach((foto, index) => {
+    const wrapper = document.createElement('div');
+    wrapper.style.position = 'relative';
+    wrapper.style.display = 'inline-block';
+
+    wrapper.innerHTML = `
+      <img src="${foto.dataUrl}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid #cbd5e1;">
+      <button type="button" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center;">&times;</button>
+    `;
+
+    wrapper.querySelector('button').addEventListener('click', () => {
+      fotosSeleccionadas.splice(index, 1);
+      renderPreviewFotos();
+    });
+
+    container.appendChild(wrapper);
+  });
+}
+
+// ==========================================================================
+// CARGA DINÁMICA DE CLIENTES
 // ==========================================================================
 async function fetchDynamicClients() {
   if (!GOOGLE_SCRIPT_URL) return;
@@ -219,7 +158,6 @@ async function fetchDynamicClients() {
     const json = await response.json();
 
     if (json && json.success && Array.isArray(json.data) && json.data.length > 0) {
-      // Vaciar CLIENTS_DATA para sincronizar al 100% las altas y bajas de Google Sheets
       CLIENTS_DATA = {};
 
       json.data.forEach(item => {
@@ -236,17 +174,16 @@ async function fetchDynamicClients() {
       }
     }
   } catch (err) {
-    console.warn('Cargando clientes desde memoria local por falta de conexión:', err);
+    console.warn('Cargando clientes desde memoria local:', err);
   }
 }
 
 // ==========================================================================
-// GESTIÓN DE EVENTOS
+// EVENTOS Y FORMULARIO
 // ==========================================================================
 function initEventListeners() {
   if (!clientSearchInput || !clientDropdownList) return;
 
-  // Buscador de clientes
   clientSearchInput.addEventListener('focus', () => {
     clientDropdownList.style.display = 'block';
     renderClientDropdown(clientSearchInput.value);
@@ -259,12 +196,9 @@ function initEventListeners() {
   });
 
   if (clearSearchBtn) {
-    clearSearchBtn.addEventListener('click', () => {
-      resetClientSelection();
-    });
+    clearSearchBtn.addEventListener('click', () => resetClientSelection());
   }
 
-  // Cerrar dropdown si se hace clic fuera
   document.addEventListener('click', (e) => {
     const wrapper = document.getElementById('client-select-wrapper');
     if (wrapper && !wrapper.contains(e.target)) {
@@ -272,7 +206,6 @@ function initEventListeners() {
     }
   });
 
-  // Botón para desplegar campo de servicio personalizado
   const btnAddCustomService = document.getElementById('btn-add-custom-service');
   const customServiceInputWrapper = document.getElementById('custom-service-input-wrapper');
   const btnSaveCustomService = document.getElementById('btn-save-custom-service');
@@ -308,7 +241,6 @@ function initEventListeners() {
     });
   }
 
-  // Operario
   if (operatorSelect) {
     operatorSelect.addEventListener('change', () => {
       if (operatorSelect.value === 'Otro') {
@@ -329,9 +261,6 @@ function initEventListeners() {
   if (form) form.addEventListener('submit', handleFormSubmit);
 }
 
-// ==========================================================================
-// LÓGICA DEL SELECT DE CLIENTES
-// ==========================================================================
 function renderClientDropdown(filterText) {
   if (!clientDropdownList) return;
 
@@ -342,7 +271,6 @@ function renderClientDropdown(filterText) {
 
   const normalizedFilter = (filterText || '').toLowerCase().trim();
 
-  // Filtrar y ordenar alfabéticamente en español
   const filteredClients = Object.keys(CLIENTS_DATA)
     .filter(client => client && client.toLowerCase().includes(normalizedFilter))
     .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
@@ -398,18 +326,13 @@ function resetClientSelection() {
   saveDraft();
 }
 
-// ==========================================================================
-// RENDERIZADO DE SERVICIOS
-// ==========================================================================
 function renderServicesGrid(clientName) {
   if (!servicesContainer) return;
   servicesContainer.innerHTML = '';
   const clientObj = CLIENTS_DATA[clientName];
   const services = (clientObj && Array.isArray(clientObj.servicios)) ? clientObj.servicios : [];
 
-  services.forEach(service => {
-    createServiceCard(service, false);
-  });
+  services.forEach(service => createServiceCard(service, false));
 }
 
 function createServiceCard(serviceName, isSelected = false) {
@@ -457,9 +380,7 @@ function addCustomServiceCard(serviceName) {
   cards.forEach(c => {
     if (c.dataset.service.toLowerCase() === serviceName.toLowerCase()) {
       exists = true;
-      if (!c.classList.contains('selected')) {
-        c.click();
-      }
+      if (!c.classList.contains('selected')) c.click();
     }
   });
 
@@ -470,9 +391,6 @@ function addCustomServiceCard(serviceName) {
   }
 }
 
-// ==========================================================================
-// VALIDACIONES Y CONTROL DE ENVÍO
-// ==========================================================================
 function validateForm() {
   let isValid = true;
 
@@ -519,9 +437,7 @@ async function handleFormSubmit(e) {
   if (!validateForm()) {
     showToast('error', 'Campos incompletos', 'Por favor, rellena los campos marcados en rojo.');
     const firstInvalid = document.querySelector('.form-group.invalid');
-    if (firstInvalid) {
-      firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
 
@@ -537,6 +453,7 @@ async function handleFormSubmit(e) {
     fecha: serviceDateInput ? serviceDateInput.value : '',
     operario: finalOperator,
     observaciones: observationsTextarea ? observationsTextarea.value.trim() : '',
+    fotos: fotosSeleccionadas.map(f => ({ name: f.name, mimeType: f.mimeType, base64: f.base64 })),
     fcmToken: window.fcmToken
   };
 
@@ -550,7 +467,7 @@ async function handleFormSubmit(e) {
   } else {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 8000);
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
       await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
@@ -558,12 +475,12 @@ async function handleFormSubmit(e) {
         signal: controller.signal,
       });
       clearTimeout(timeoutId);
-      showToast('success', '¡Registro Guardado!', 'Los datos se enviaron a tu hoja de cálculo en Drive.');
+      showToast('success', '¡Registro Guardado!', 'Los datos y las fotos se enviaron a tu Google Drive.');
       clearForm();
       clearDraft();
     } catch (err) {
       console.error('Error al enviar:', err);
-      showToast('success', 'Registro Guardado', 'Los datos se enviaron a tu hoja de cálculo en Drive.');
+      showToast('success', 'Registro Guardado', 'Los datos se enviaron a tu Google Drive.');
       clearForm();
       clearDraft();
     } finally {
@@ -591,12 +508,11 @@ function setLoadingState(isLoading) {
 function clearForm() {
   if (form) form.reset();
   resetClientSelection();
+  fotosSeleccionadas = [];
+  renderPreviewFotos();
   establecerFechaActual();
 }
 
-// ==========================================================================
-// BORRADOR LOCAL (LOCALSTORAGE DRAFT BACKUP)
-// ==========================================================================
 function saveDraft() {
   const draft = {
     cliente: selectedClientInput ? selectedClientInput.value : '',
@@ -637,9 +553,7 @@ function loadDraft() {
       renderServicesGrid(draft.cliente);
 
       if (draft.adHocServices && Array.isArray(draft.adHocServices)) {
-        draft.adHocServices.forEach(serviceName => {
-          addCustomServiceCard(serviceName);
-        });
+        draft.adHocServices.forEach(serviceName => addCustomServiceCard(serviceName));
       }
 
       if (draft.selectedServices && Array.isArray(draft.selectedServices) && servicesContainer) {
@@ -664,9 +578,6 @@ function clearDraft() {
   localStorage.removeItem('emco_servicios_draft');
 }
 
-// ==========================================================================
-// TOAST NOTIFICATIONS
-// ==========================================================================
 function showToast(type, title, message) {
   if (!toastContainer) return;
   const toast = document.createElement('div');
@@ -686,8 +597,6 @@ function showToast(type, title, message) {
 
   setTimeout(() => {
     toast.classList.add('hide');
-    setTimeout(() => {
-      toast.remove();
-    }, 300);
+    setTimeout(() => toast.remove(), 300);
   }, 4500);
 }
