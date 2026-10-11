@@ -109,14 +109,22 @@
 
         <!-- SECCIÓN 5: FOTOS / EVIDENCIAS -->
         <div class="form-group">
-          <label for="photo-input" class="field-label">
+          <label class="field-label">
             <span class="label-number">05</span> Fotos / Evidencia (Opcional)
           </label>
           <div class="input-icon-wrapper" style="padding: 12px; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed #cbd5e1; text-align: center;">
-            <input type="file" id="photo-input" accept="image/*" multiple style="display: none;">
-            <button type="button" class="btn-secondary btn-sm" id="btn-select-photos" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
-              <span>📷</span> Tomar foto o adjuntar imágenes
-            </button>
+            <input type="file" id="camera-input" accept="image/*" capture="environment" style="display: none;">
+            <input type="file" id="gallery-input" accept="image/*" multiple style="display: none;">
+            
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+              <button type="button" class="btn-secondary btn-sm" id="btn-take-photo" style="flex: 1; min-width: 130px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <span>📸</span> Tomar Foto
+              </button>
+              <button type="button" class="btn-secondary btn-sm" id="btn-select-gallery" style="flex: 1; min-width: 130px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <span>🖼️</span> Elegir Galería
+              </button>
+            </div>
+            
             <div id="photo-preview-container" style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; justify-content: center;"></div>
           </div>
         </div>
