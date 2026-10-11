@@ -1,13 +1,14 @@
 /* ==========================================================================
    EMCO - LÓGICA DE LA APLICACIÓN WEB DE SERVICIOS
    ========================================================================== */
+
 // -------------------------------------------------
 // Token de Firebase Cloud Messaging (FCM)
 // -------------------------------------------------
-// Definido como null por ahora; se activará cuando implementemos notificaciones push.
 window.fcmToken = null;
-// 1. Base de datos integrada de Clientes y sus correspondientes Servicios
-const CLIENTS_DATA = {
+
+// Base de datos de Clientes y Servicios (Servirá como respaldo si no hay conexión)
+let CLIENTS_DATA = {
   "Albacete, 21": {
     "tipo": "Comunidad",
     "servicios": ["Ventanas", "Puerta", "Alicatado zaguán", "Luminaria", "Terraza", "Cuartos"]
@@ -149,8 +150,6 @@ const CLIENTS_DATA = {
 // ==========================================================================
 // CONFIGURACIÓN DE CONEXIÓN CON GOOGLE SHEETS
 // ==========================================================================
-// Pega aquí la URL de la Web App generada al publicar tu Google Apps Script.
-// Ejemplo: "https://script.google.com/macros/s/AKfycbx.../exec"
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwTsqltmkZf0cvSwWqkmJe7H5AxTqCcZJBGWFZPkKUr52k2qXT4s3KMIUKTEU-sRQxg/exec"; 
 
 // Elementos del DOM
@@ -177,7 +176,7 @@ let adHocServices = []; // Servicios personalizados añadidos temporalmente
 // ==========================================================================
 // INICIALIZACIÓN
 // ==========================================================================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const now = new Date();
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -185,19 +184,52 @@ document.addEventListener('DOMContentLoaded', () => {
   const hour = String(now.getHours()).padStart(2, '0');
   const minute = String(now.getMinutes()).padStart(2, '0');
   serviceDateInput.value = `${year}-${month}-${day}T${hour}:${minute}`;
+
   if (!GOOGLE_SCRIPT_URL) {
     configBanner.style.display = 'block';
   }
 
-  // 3. Cargar la lista completa de clientes en el dropdown
+  // 1. Cargar primero lista inicial en el dropdown
   renderClientDropdown('');
 
-  // 4. Intentar recuperar borrador del LocalStorage
+  // 2. Obtener lista actualizada desde Google Sheets
+  await fetchDynamicClients();
+
+  // 3. Intentar recuperar borrador del LocalStorage
   loadDraft();
 
-  // 5. Configurar manejadores de eventos
+  // 4. Configurar manejadores de eventos
   initEventListeners();
 });
+
+// ==========================================================================
+// CARGA DINÁMICA DE CLIENTES DESDE GOOGLE SHEETS
+// ==========================================================================
+async function fetchDynamicClients() {
+  if (!GOOGLE_SCRIPT_URL) return;
+
+  try {
+    const response = await fetch(GOOGLE_SCRIPT_URL);
+    const json = await response.json();
+
+    if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+      // Actualizar la estructura CLIENTS_DATA con los clientes de la hoja
+      json.data.forEach(item => {
+        if (item.cliente) {
+          CLIENTS_DATA[item.cliente] = {
+            tipo: item.tipoInmueble || "Cliente",
+            servicios: item.servicios || []
+          };
+        }
+      });
+
+      // Volver a renderizar el desplegable con los clientes actualizados
+      renderClientDropdown(clientSearchInput.value);
+    }
+  } catch (err) {
+    console.warn('Cargando clientes desde memoria local por falta de respuesta:', err);
+  }
+}
 
 // ==========================================================================
 // GESTIÓN DE EVENTOS
@@ -277,7 +309,7 @@ function initEventListeners() {
 }
 
 // ==========================================================================
-// LOGICA DEL SELECT DE CLIENTES
+// LÓGICA DEL SELECT DE CLIENTES
 // ==========================================================================
 function renderClientDropdown(filterText) {
   clientDropdownList.innerHTML = '';
@@ -342,7 +374,8 @@ function resetClientSelection() {
 // ==========================================================================
 function renderServicesGrid(clientName) {
   servicesContainer.innerHTML = '';
-  const services = CLIENTS_DATA[clientName].servicios;
+  const clientObj = CLIENTS_DATA[clientName];
+  const services = clientObj ? clientObj.servicios : [];
 
   services.forEach(service => {
     createServiceCard(service, false);
@@ -452,7 +485,6 @@ async function handleFormSubmit(e) {
   
   if (!validateForm()) {
     showToast('error', 'Campos incompletos', 'Por favor, rellena los campos marcados en rojo.');
-    // Hacer scroll al primer error
     const firstInvalid = document.querySelector('.form-group.invalid');
     if (firstInvalid) {
       firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -460,7 +492,6 @@ async function handleFormSubmit(e) {
     return;
   }
 
-  // Deshabilitar botón y activar loader
   setLoadingState(true);
 
   const finalOperator = operatorSelect.value === 'Otro' 
@@ -469,7 +500,7 @@ async function handleFormSubmit(e) {
 
   const payload = {
     cliente: selectedClientInput.value,
-    servicios: activeSelectedServices, // Array de servicios seleccionados
+    servicios: activeSelectedServices,
     fecha: serviceDateInput.value,
     operario: finalOperator,
     observaciones: observationsTextarea.value.trim(),
@@ -477,7 +508,6 @@ async function handleFormSubmit(e) {
   };
 
   if (!GOOGLE_SCRIPT_URL) {
-    // MODO SIMULACIÓN (Ideal para pruebas locales seguras y fluidas)
     setTimeout(() => {
       setLoadingState(false);
       showToast('success', '¡Registro Exitoso (Simulado)!', `Se guardó correctamente en Drive para el cliente: ${payload.cliente}`);
@@ -485,13 +515,11 @@ async function handleFormSubmit(e) {
       clearDraft();
     }, 1800);
   } else {
-    // MODO PRODUCCIÓN (Envío real a Google Sheets)
     try {
-      // Enviar datos al Apps Script con timeout.
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 s timeout
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        await fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
           body: JSON.stringify(payload),
@@ -503,15 +531,12 @@ async function handleFormSubmit(e) {
         clearDraft();
       } catch (err) {
         console.error('Error al enviar a Google Apps Script:', err);
-        // En caso de error (p.ej. timeout) también informamos de éxito porque la hoja suele guardarse.
         showToast('success', 'Registro Guardado', 'Los datos se enviaron a tu hoja de cálculo en Drive.');
         clearForm();
         clearDraft();
       }
     } catch (err) {
       console.error(err);
-      // Muchos navegadores bloquean CORS en Apps Script redirigidos, pero los datos se guardan igual.
-      // Proporcionamos un fallback inteligente.
       showToast('success', 'Registro Guardado', 'Los datos se enviaron a tu hoja de cálculo en Drive.');
       clearForm();
       clearDraft();
@@ -538,9 +563,7 @@ function setLoadingState(isLoading) {
 
 function clearForm() {
   form.reset();
-  // Restablecer valores especiales
   resetClientSelection();
-  // Restablecer fecha al día y hora actuales (datetime-local)
   const now = new Date();
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -574,7 +597,6 @@ function loadDraft() {
     const draft = JSON.parse(rawDraft);
     if (!draft) return;
 
-    // Cargar campos sencillos
     if (draft.fecha) serviceDateInput.value = draft.fecha;
     if (draft.operario) {
       operatorSelect.value = draft.operario;
@@ -585,24 +607,20 @@ function loadDraft() {
     }
     if (draft.observaciones) observationsTextarea.value = draft.observaciones;
 
-    // Cargar cliente y detonar renderizado de servicios
     if (draft.cliente && CLIENTS_DATA[draft.cliente]) {
       clientSearchInput.value = draft.cliente;
       selectedClientInput.value = draft.cliente;
       clearSearchBtn.style.display = 'block';
       servicesSection.style.display = 'block';
       
-      // Renderizar servicios base
       renderServicesGrid(draft.cliente);
       
-      // Restaurar adHocServices personalizados
       if (draft.adHocServices && Array.isArray(draft.adHocServices)) {
         draft.adHocServices.forEach(serviceName => {
           addCustomServiceCard(serviceName);
         });
       }
       
-      // Autoseleccionar servicios que estaban marcados
       if (draft.selectedServices && Array.isArray(draft.selectedServices)) {
         const cards = servicesContainer.querySelectorAll('.service-card');
         cards.forEach(card => {
@@ -644,7 +662,6 @@ function showToast(type, title, message) {
   
   toastContainer.appendChild(toast);
   
-  // Autocerrar a los 4.5 segundos
   setTimeout(() => {
     toast.classList.add('hide');
     setTimeout(() => {
