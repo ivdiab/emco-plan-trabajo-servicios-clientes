@@ -1,5 +1,5 @@
 /* ==========================================================================
-   EMCO - LÓGICA DE LA APLICACIÓN WEB DE SERVICIOS CON FOTOS
+   EMCO - LÓGICA DE LA APLICACIÓN WEB DE SERVICIOS CON FOTOS Y CÁMARA
    ========================================================================== */
 
 window.fcmToken = null;
@@ -56,31 +56,44 @@ function establecerFechaActual() {
 }
 
 // ==========================================================================
-// GESTIÓN Y COMPRESIÓN DE FOTOS
+// GESTIÓN Y COMPRESIÓN DE FOTOS (CÁMARA Y GALERÍA)
 // ==========================================================================
 function configurarGestionFotos() {
-  const btnSelect = document.getElementById('btn-select-photos');
-  const photoInput = document.getElementById('photo-input');
+  const btnTakePhoto = document.getElementById('btn-take-photo');
+  const btnSelectGallery = document.getElementById('btn-select-gallery');
+  const cameraInput = document.getElementById('camera-input');
+  const galleryInput = document.getElementById('gallery-input');
 
-  if (btnSelect && photoInput) {
-    btnSelect.addEventListener('click', () => photoInput.click());
-
-    photoInput.addEventListener('change', async (e) => {
-      const files = Array.from(e.target.files);
-      for (const file of files) {
-        if (file.type.startsWith('image/')) {
-          try {
-            const compressed = await comprimirImagen(file, 1024, 0.7);
-            fotosSeleccionadas.push(compressed);
-          } catch (err) {
-            console.error('Error al procesar la foto:', err);
-          }
-        }
-      }
-      renderPreviewFotos();
-      photoInput.value = '';
+  if (btnTakePhoto && cameraInput) {
+    btnTakePhoto.addEventListener('click', () => cameraInput.click());
+    cameraInput.addEventListener('change', async (e) => {
+      await procesarArchivosImagen(e.target.files);
+      cameraInput.value = '';
     });
   }
+
+  if (btnSelectGallery && galleryInput) {
+    btnSelectGallery.addEventListener('click', () => galleryInput.click());
+    galleryInput.addEventListener('change', async (e) => {
+      await procesarArchivosImagen(e.target.files);
+      galleryInput.value = '';
+    });
+  }
+}
+
+async function procesarArchivosImagen(fileList) {
+  const files = Array.from(fileList);
+  for (const file of files) {
+    if (file.type.startsWith('image/')) {
+      try {
+        const compressed = await comprimirImagen(file, 1024, 0.7);
+        fotosSeleccionadas.push(compressed);
+      } catch (err) {
+        console.error('Error al procesar foto:', err);
+      }
+    }
+  }
+  renderPreviewFotos();
 }
 
 function comprimirImagen(file, maxAncho, calidad) {
