@@ -7,7 +7,7 @@
 // -------------------------------------------------
 window.fcmToken = null;
 
-// Base de datos de Clientes y Servicios (Servirá como respaldo local)
+// Base de datos de Clientes y Servicios (Servirá como respaldo si no hay conexión)
 let CLIENTS_DATA = {
   "Albacete, 21": {
     "tipo": "Comunidad",
@@ -177,7 +177,7 @@ let adHocServices = [];
 // INICIALIZACIÓN
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Establecer fecha actual de inmediato
+  // 1. Establecer fecha actual
   establecerFechaActual();
 
   if (!GOOGLE_SCRIPT_URL && configBanner) {
@@ -219,6 +219,9 @@ async function fetchDynamicClients() {
     const json = await response.json();
 
     if (json && json.success && Array.isArray(json.data) && json.data.length > 0) {
+      // Vaciar CLIENTS_DATA para sincronizar al 100% las altas y bajas de Google Sheets
+      CLIENTS_DATA = {};
+
       json.data.forEach(item => {
         if (item && item.cliente) {
           CLIENTS_DATA[item.cliente] = {
@@ -233,7 +236,7 @@ async function fetchDynamicClients() {
       }
     }
   } catch (err) {
-    console.warn('Cargando clientes desde memoria local:', err);
+    console.warn('Cargando clientes desde memoria local por falta de conexión:', err);
   }
 }
 
